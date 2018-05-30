@@ -85,18 +85,29 @@ df['Forecast'] = np.nan
 # iloc es index location, en este caso te devuelve el id
 # de la ultima fila
 last_date = df.iloc[-1].name
+# consigo la ultima fecha
 last_unix = last_date.timestamp()
+# cantidad de segundos en un dia
 one_day = 86400
+# Le suma el siguiente dia
 next_unix = last_unix + one_day
 
+# itera en este caso por los 35 dias
 for i in forecast_set:
+    # La libreria tiena una clase que tiene un metodo que convierte unix en fecha
     next_date = datetime.datetime.fromtimestamp(next_unix)
-    next_unix += 86400
+    next_unix += one_day
     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)]+[i]
 
+# Grafico el valor de cierre
 df['Adj. Close'].plot()
+# Grafico la columna de prediccion
 df['Forecast'].plot()
+
 plt.legend(loc=4)
+# etiquetas en el grafico
 plt.xlabel('Date')
 plt.ylabel('Price')
+
+#muestro el grafico
 plt.show()
