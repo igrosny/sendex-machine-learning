@@ -6,6 +6,8 @@ from sklearn.linear_model import LinearRegression
 import datetime
 import matplotlib.pyplot as plt
 from matplotlib import style
+import pickle
+import sys, getopt
 
 # esto es simplemente para que los graficos se vean bonitos
 style.use('ggplot')
@@ -68,8 +70,37 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 # Defino el classifier
 clf = LinearRegression()
 
-# Entreno el classifier
-clf.fit(X_train, y_train)
+# En esta parte pregunta si se le esta pasando algo archivo
+# como parametro. Si es -i lee de ese archivo
+# Si -o guarda en ese archivo
+try:
+    opts, args = getopt.getopt(sys.argv[1:],"hi:o:",["ifile=","ofile="])
+except getopt.GetoptError:
+    print ('test.py -i <inputfile> -o <outputfile>')
+    sys.exit(2)
+
+writeonfile = False
+readfromfile = False
+
+# Itero por todas las opciones
+for opt, arg in opts:
+    if opt in ("-i", "--ifile"):
+        # Si tengo un input file lo levanto con pickle y lo asigno al clasifier
+        pickle_in = open(arg, 'rb')
+        clf = pickle.load(pickle_in)
+        readfromfile = True
+    elif opt in ("-o", "--ofile"):
+        # Si voy a guardar el clasifier asigno el nombre -o a esta var
+        writeonfile = arg
+
+if readfromfile == False:
+    # Entreno el classifier
+    clf.fit(X_train, y_train)
+
+if writeonfile != False:
+    # Con esto se guarda
+    with open(writeonfile,'wb') as f:
+        pickle.dump(clf, f)
 
 # lo testeamos usando la data para testing
 confidence = clf.score(X_test, y_test)
