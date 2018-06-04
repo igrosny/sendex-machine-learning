@@ -26,8 +26,5 @@ plt.scatter(new_features[0],new_features[1], s=100, color='b')
 # muestro el plot
 plt.show()
 
-# def k_nearest_neighbors(data, predict, k=3):
-#     if len(data) >= k:
-#         warnings.warn("K is set to a value")
 
     
