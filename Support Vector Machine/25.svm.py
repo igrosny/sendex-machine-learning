@@ -3,7 +3,9 @@ from matplotlib import style
 import numpy as np
 style.use('ggplot')
 
+# Aca defino la clase
 class Support_Vector_Machine:
+    # Este es el constructor
     def __init__(self, visualization=True):
         self.visualization = visualization
         self.colors = {1:'r', -1:'b'}
@@ -15,7 +17,7 @@ class Support_Vector_Machine:
     def fit(self, data):
         pass
 
-    # Esta es la funcion para predecir
+    # Esta es la funcion para
     def predict(self, features):
         # sign (x.w+b)
         classification = np.sign(np.dot(np.array(features), self.w)+self.b)
