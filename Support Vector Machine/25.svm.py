@@ -10,12 +10,56 @@ class Support_Vector_Machine:
         self.visualization = visualization
         self.colors = {1:'r', -1:'b'}
         if self.visualization:
+            # crea un objeto figure
             self.fig = plt.figure()
+            # Le agrega los ejes
             self.ax = self.fig.add_subplot(1, 1, 1)
 
     # Esta es la funcion para entrenar
     def fit(self, data):
-        pass
+        self.data = data
+        #{ ||w||: [w,b]}
+        opt_dict = {}
+
+        transforms = [[1,1],
+                    [-1,1],
+                    [-1,-1],
+                    [1,-1],]
+
+        # busca maximo y minimos ranges
+        all_data = []
+        for yi in self.data:
+            for featureset in self.data[yi]:
+                for feature in featureset:
+                    all_data.append(feature)
+
+        self.max_feature_value = max(all_data)
+        self.min_feature_value = max(all_data)
+
+        all_data = None
+
+        # Empieza con big steps
+        step_sizes = [self.max_feature_value * 0.1,
+                    self.max_feature_value * 0.01,
+                    self.max_feature_value * 0.001,]
+
+        # Extremely expensive, b no tiene que hacer pasos tan peque~no
+        # no tiene que ser preciso
+        b_range_multiple = 5
+
+        #
+        b_multiple = 5
+
+        latest_optimum = self.max_feature_value * 10
+
+        for step in step_sizes:
+            w = np.array([latest_optimum, latest_optimum])
+            # cuando converge
+            optimized = False
+            while not optimized:
+                pass
+
+        
 
     # Esta es la funcion para
     def predict(self, features):
