@@ -35,19 +35,22 @@ class Support_Vector_Machine:
             for featureset in self.data[yi]:
                 #itero las columna
                 for feature in featureset:
-                    # pongo cada valor en el dict
+                    # pongo cada valor en la lista
                     all_data.append(feature)
 
-
+        # agarro el valor maximo de todas la lista
         self.max_feature_value = max(all_data)
+        # agarro el valor minimo
         self.min_feature_value = min(all_data)
 
+        # limpio esto
         all_data = None
 
         # Empieza con big steps
         step_sizes = [self.max_feature_value * 0.1,
                     self.max_feature_value * 0.01,
                     self.max_feature_value * 0.001,]
+
 
         # Extremely expensive, b no tiene que hacer pasos tan peque~no
         # no tiene que ser preciso
@@ -56,31 +59,37 @@ class Support_Vector_Machine:
         #
         b_multiple = 5
 
+        # selecciono el maximo valor y lo multiplico por 10
         latest_optimum = self.max_feature_value * 10
 
+        # Itero cada step (son 3)
         for step in step_sizes:
             w = np.array([latest_optimum, latest_optimum])
             # cuando converge
             optimized = False
             while not optimized:
-                for b in np.arange(-1*(self.max_feature_value*b_range_multiple),
+                # np.arange crea in intervalo de espacios iguales
+                for b in np.arange(-1 * (self.max_feature_value * b_range_multiple),
                         self.max_feature_value * b_range_multiple,
                         step * b_multiple):
+                    # lo multipla por cada transformacion
                     for transformation in transforms:
-                        w_t = w*transformation
+                        w_t = w * transformation
                         found_option = True
                         # Es eslavon mas fragil del SVM
                         # SMO - ver que es
                         # yi(xi.w + b) >= 1
+                        # Itero la clase
                         for i in self.data:
+                            #itero las filas
                             for xi in self.data[i]:
                                 yi = i
-                                if not yi*(np.dot(w_t,xi)+b) >= 1:
+                                if not yi * (np.dot(w_t , xi) + b) >= 1:
                                     found_option = False
                                     break
 
                         if found_option:
-                            opt_dict[np.linalg.norm(w_t)] = [w_t,b]
+                            opt_dict[np.linalg.norm(w_t)] = [w_t, b]
 
                 if w[0] < 0:
                     optimized = True 
@@ -96,21 +105,21 @@ class Support_Vector_Machine:
             self.w = opt_choice[0]
             self.b = opt_choice[1]
 
-            latest_optimum = opt_choice[0][0]+step * 2
+            latest_optimum = opt_choice[0][0] + step * 2
 
         
 
     # Esta es la funcion para
     def predict(self, features):
         # sign (x.w+b)
-        classification = np.sign(np.dot(np.array(features), self.w)+self.b)
+        classification = np.sign(np.dot(np.array(features), self.w) + self.b)
         if classification !=0 and self.visualization:
             self.ax.scatter(features[0], features[1], s=200, marker='*',c=self.colors[classification])
         
         return classification
 
     def visualize(self):
-        [[self.ax.scatter(x[0],x[1],s=100, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
+        [[self.ax.scatter(x[0], x[1], s=100, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
 
         def hyperplane(x,w,b,v):
             return (-w[0]*x-b+v) / w[1]
