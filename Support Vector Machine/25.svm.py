@@ -17,6 +17,7 @@ class Support_Vector_Machine:
 
     # Esta es la funcion para entrenar
     def fit(self, data):
+        # data es un diccionario con dos clases -1 y 1
         self.data = data
         #{ ||w||: [w,b]}
         opt_dict = {}
@@ -28,13 +29,18 @@ class Support_Vector_Machine:
 
         # busca maximo y minimos ranges
         all_data = []
+        # Itero los grupo -1 y 1
         for yi in self.data:
+            # itero las filas
             for featureset in self.data[yi]:
+                #itero las columna
                 for feature in featureset:
+                    # pongo cada valor en el dict
                     all_data.append(feature)
 
+
         self.max_feature_value = max(all_data)
-        self.min_feature_value = max(all_data)
+        self.min_feature_value = min(all_data)
 
         all_data = None
 
@@ -154,5 +160,5 @@ predict_us = [[0,10],
 
 for p in predict_us:
     svn. predict(p)     
-           
+
 svn.visualize()
