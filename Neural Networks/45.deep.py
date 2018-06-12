@@ -69,16 +69,16 @@ def neural_network_model(data):
     return output
 
 def train_neural_network(x):
-    
+
     prediction = neural_network_model(x)
+    # el output layer usa softmaz si es classification
+    # or linear para regression
     cost = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=y) )
     optimizer = tf.train.AdamOptimizer().minimize(cost)
     
     hm_epochs = 10
     with tf.Session() as sess:
-        # OLD:
-        #sess.run(tf.initialize_all_variables())
-        # NEW:
+
         sess.run(tf.global_variables_initializer())
 
         for epoch in range(hm_epochs):
